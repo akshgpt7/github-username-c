@@ -1,9 +1,17 @@
 #include <stdio.h>
 #include <string.h>
 #include "requests.h"
+#include "json-c/json.h"
 
 
-int request(char username[30]) {
+int write_json_to_file(char *json) {
+	FILE *fp;
+	fp = fopen("response.json", "w");
+	fprintf(fp, "%s", json);
+	fclose(fp);
+}
+
+int request(char username[60]) {
     req_t req;                     /* declare struct used to store data */
     int ret = requests_init(&req); /* setup */
     if (ret) {
@@ -14,13 +22,13 @@ int request(char username[30]) {
 		strcat(url, username);
 
     requests_get(&req, url); /* submit GET request */
-    printf("Request URL: %s\n", req.url);
-    printf("Response Code: %lu\n", req.code);
-    printf("Response Body:\n%s", req.text);
+    
+		write_json_to_file(req.text);
 
     requests_close(&req); /* clean up */
     return 0;
 }
+
 
 
 int main() {
