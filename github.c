@@ -22,7 +22,7 @@ static int jsoneq(const char *json, jsmntok_t *tok, const char *s) {
   return -1;
 }
 
-int parse_json(char *JSON_STRING) {
+struct user_data *parse_json(char *JSON_STRING) {
   int i;
   int r;
 	char name[100] = "";
@@ -85,16 +85,8 @@ int parse_json(char *JSON_STRING) {
 			i++;
 		}
 
-
   }
-	printf("%s\n", user->name);
-	printf("%s\n", user->location);
-	printf("%s\n", user->bio);
-	printf("%d\n", user->followers);
-	printf("%d\n", user->following);
-	printf("%d\n", user->public_repos);
-	printf("%s\n", user->created_at);
-	printf("%s\n", user->updated_at);
+	return user;
 }
 
 
