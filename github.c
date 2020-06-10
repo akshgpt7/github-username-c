@@ -65,7 +65,6 @@ void display(struct node *head) {
 		current = current->next;
 		ctr++;
 	}
-
 }
 
 void swap(struct node *a, struct node *b) 
@@ -277,8 +276,8 @@ struct user_data *parse_json(char *JSON_STRING) {
 
 
 struct user_data *request(char username[60]) {
-    req_t req;                     /* declare struct used to store data */
-    int ret = requests_init(&req); /* setup */
+    req_t req;           
+    int ret = requests_init(&req); 
     if (ret) {
         return NULL;
     }
@@ -290,7 +289,7 @@ struct user_data *request(char username[60]) {
         struct user_data *ptr;
 		ptr = parse_json(req.text);
 
-    requests_close(&req); /* clean up */
+    requests_close(&req); 
     return ptr;
 }
 
@@ -300,8 +299,8 @@ int main() {
     int choice;
 
 		printf("Enter Username: ");
-		scanf("%s",username);
-		ptr=request(username);
+		scanf("%s", username);
+		ptr = request(username);
 		insert(*ptr);
 
     while(1){
@@ -311,8 +310,8 @@ int main() {
             break;
 				else {
 					printf("Enter Username: ");
-		      scanf("%s",username);
-		      ptr=request(username);
+		      scanf("%s", username);
+		      ptr = request(username);
 		      insert(*ptr);
 				}
     }
@@ -352,7 +351,5 @@ int main() {
 		}
     
     display(head);
-		
-
 }
 
