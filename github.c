@@ -14,6 +14,192 @@ struct user_data {
 	char updated_at[30];
 };
 
+struct node {
+    struct user_data data;
+    struct node *next;
+};
+
+struct node *head = NULL;
+
+void insert(struct user_data u) {
+		struct node *r, *temp;
+		r = calloc(1, sizeof(struct node));
+
+		strcpy(r->data.name, u.name);
+		strcpy(r->data.location, u.location);
+    strcpy(r->data.bio, u.bio);
+		r->data.public_repos = u.public_repos;
+		r->data.followers = u.followers;
+		r->data.following = u.following;
+		strcpy(r->data.created_at, u.created_at);
+    strcpy(r->data.updated_at, u.updated_at);
+		r->next = NULL;
+		if(head == NULL) {
+		head = r;
+		return;
+	}
+	temp = head;
+	while(temp->next != NULL){
+		temp = temp->next;
+	}
+	temp->next = r;
+}
+
+void display(struct node *head) {
+	int ctr = 0;
+	struct node *current;
+  current = head;
+  
+	printf("\n----------------------------------------\n\n");
+	while (current != NULL) {
+    printf("\n\n---------- #%d ----------\n\n", ctr+1);
+		printf("Full Name :: %s\n", current->data.name);
+		printf("Location :: %s\n", current->data.location);
+		printf("Bio :: %s\n", current->data.bio);
+		printf("Public Repositories :: %d\n", current->data.public_repos);
+		printf("Followers :: %d\n", current->data.followers);
+		printf("Following :: %d\n", current->data.following);
+		printf("Account created at :: %s\n", current->data.created_at);
+		printf("Account updated at :: %s\n", current->data.updated_at);
+
+		current = current->next;
+		ctr++;
+	}
+
+}
+
+void swap(struct node *a, struct node *b) 
+{ 
+    struct user_data temp = a->data; 
+    a->data = b->data; 
+    b->data = temp; 
+}
+
+void sort_by_followers(struct node *head) {
+    int swapped, i; 
+    struct node *ptr1; 
+    struct node *lptr = NULL; 
+  
+    if (head == NULL) 
+        return; 
+    do
+    { 
+        swapped = 0; 
+        ptr1 = head; 
+        while (ptr1->next != lptr) 
+        { 
+            if (ptr1->data.followers < ptr1->next->data.followers) 
+            {  
+                swap(ptr1, ptr1->next); 
+                swapped = 1; 
+            } 
+            ptr1 = ptr1->next; 
+        } 
+        lptr = ptr1; 
+    } 
+    while (swapped); 
+}
+
+void sort_by_following(struct node *head) {
+    int swapped, i; 
+    struct node *ptr1; 
+    struct node *lptr = NULL; 
+  
+    if (head == NULL) 
+        return; 
+    do
+    { 
+        swapped = 0; 
+        ptr1 = head; 
+        while (ptr1->next != lptr) 
+        { 
+            if (ptr1->data.following < ptr1->next->data.following) 
+            {  
+                swap(ptr1, ptr1->next); 
+                swapped = 1; 
+            } 
+            ptr1 = ptr1->next; 
+        } 
+        lptr = ptr1; 
+    } 
+    while (swapped); 
+}
+
+void sort_by_public_repos(struct node *head) {
+    int swapped, i; 
+    struct node *ptr1; 
+    struct node *lptr = NULL; 
+  
+    if (head == NULL) 
+        return; 
+    do
+    { 
+        swapped = 0; 
+        ptr1 = head; 
+        while (ptr1->next != lptr) 
+        { 
+            if (ptr1->data.public_repos < ptr1->next->data.public_repos) 
+            {  
+                swap(ptr1, ptr1->next); 
+                swapped = 1; 
+            } 
+            ptr1 = ptr1->next; 
+        } 
+        lptr = ptr1; 
+    } 
+    while (swapped); 
+}
+
+void sort_by_created_at(struct node *head) {
+    int swapped, i; 
+    struct node *ptr1; 
+    struct node *lptr = NULL; 
+  
+    if (head == NULL) 
+        return; 
+    do
+    { 
+        swapped = 0; 
+        ptr1 = head; 
+        while (ptr1->next != lptr) 
+        { 
+            if (ptr1->data.created_at < ptr1->next->data.created_at) 
+            {  
+                swap(ptr1, ptr1->next); 
+                swapped = 1; 
+            } 
+            ptr1 = ptr1->next; 
+        } 
+        lptr = ptr1; 
+    } 
+    while (swapped); 
+}
+
+void sort_by_updated_at(struct node *head) {
+    int swapped, i; 
+    struct node *ptr1; 
+    struct node *lptr = NULL; 
+  
+    if (head == NULL) 
+        return; 
+    do
+    { 
+        swapped = 0; 
+        ptr1 = head; 
+        while (ptr1->next != lptr) 
+        { 
+            if (ptr1->data.updated_at < ptr1->next->data.updated_at) 
+            {  
+                swap(ptr1, ptr1->next); 
+                swapped = 1; 
+            } 
+            ptr1 = ptr1->next; 
+        } 
+        lptr = ptr1; 
+    } 
+    while (swapped); 
+}
+
 static int jsoneq(const char *json, jsmntok_t *tok, const char *s) {
   if (tok->type == JSMN_STRING && (int)strlen(s) == tok->end - tok->start &&
       strncmp(json + tok->start, s, tok->end - tok->start) == 0) {
@@ -41,8 +227,8 @@ struct user_data *parse_json(char *JSON_STRING) {
 
   jsmn_init(&p);
   r = jsmn_parse(&p, JSON_STRING, strlen(JSON_STRING), t,
-                 sizeof(t) / sizeof(t[0]));	
-  
+                 sizeof(t) / sizeof(t[0]));
+
 	for (i = 1; i < r; i++) {
     if (jsoneq(JSON_STRING, &t[i], "name") == 0) {
 			strncpy(name, JSON_STRING + t[i + 1].start, t[i + 1].end - t[i + 1].start);
@@ -90,45 +276,83 @@ struct user_data *parse_json(char *JSON_STRING) {
 }
 
 
-int request(char username[60]) {
+struct user_data *request(char username[60]) {
     req_t req;                     /* declare struct used to store data */
     int ret = requests_init(&req); /* setup */
     if (ret) {
-        return 1;
+        return NULL;
     }
 
 		char url[] = "https://api.github.com/users/";
 		strcat(url, username);
 
     requests_get(&req, url); /* submit GET request */
-    
-		parse_json(req.text);
+        struct user_data *ptr;
+		ptr = parse_json(req.text);
 
     requests_close(&req); /* clean up */
-    return 0;
+    return ptr;
 }
 
 int main() {
-	int i, n;
+    char username[60], c;
+		struct user_data *ptr;
+    int choice;
 
-	printf("Enter number of users you want to fetch: ");
-	scanf("%d", &n);
+		printf("Enter Username: ");
+		scanf("%s",username);
+		ptr=request(username);
+		insert(*ptr);
 
-	char usernames[n][30];
-	// struct user_data users_arr[n];
-
-	for (i=0; i<n; i++) {
-		printf("Enter username %d: ", i+1);
-		scanf("%s", &usernames[i][0]);
-	}
-
-	for (i=0; i<n; i++) {
-    request(usernames[i]);
-	}
-
-
-
+    while(1){
+        printf("Do you want to enter more usernames? (y/n): ");
+        scanf("\n%c",&c);
+        if(c == 'n' || c == 'N')
+            break;
+				else {
+					printf("Enter Username: ");
+		      scanf("%s",username);
+		      ptr=request(username);
+		      insert(*ptr);
+				}
+    }
+		printf("\n\nSort users by: \n");
+		printf("1. Number of Followers\n");
+		printf("2. Number of Following\n");
+		printf("3. Number of public repositories\n");
+		printf("4. Date of account creation\n");
+		printf("5. Date of account last updated\n");
+    
+		printf("\nEnter choice: ");
+		scanf("%d", &choice);
+		
+		switch(choice) {
+			case 1:
+				printf("\n\nSorted by Followers.");
+				sort_by_followers(head);
+				break;
+			case 2:
+				printf("\n\nSorted by Following.");
+				sort_by_following(head);
+				break;
+			case 3:
+				printf("\n\nSorted by number of public repositories.");
+				sort_by_public_repos(head);
+				break;
+			case 4:
+				printf("\n\nSorted by date of account creation.");
+				sort_by_created_at(head);
+				break;
+			case 5:
+				printf("\n\nSorted by date of account last updated.");
+				sort_by_updated_at(head);
+				break;
+			default:
+				printf("Invalid choice");
+		}
+    
+    display(head);
+		
 
 }
-// CHANGE main() TO: Y/N KI AUR INPUT YA NHI RATHER THAN ASKING NUMBER OF INPUTS
-// THEN MAKE LINKED LIST AND SORT
+
