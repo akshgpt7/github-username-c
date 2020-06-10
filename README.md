@@ -13,3 +13,6 @@ On OS X, use homebrew and run `brew install curl`. On Ubuntu, `sudo apt-get inst
 - After compiling, to execute the program, run `./github`.
 
 ## Screenshots
+![screenshot1](https://raw.githubusercontent.com/akshgpt7/github-username-c/master/screenshots/Screenshot%20from%202020-06-10%2018-23-56.png?token=AE3VYP27CXGRVJRPUVYP3ES65IJQ6)
+
+![screenshot2](https://raw.githubusercontent.com/akshgpt7/github-username-c/master/screenshots/Screenshot%20from%202020-06-10%2018-24-34.png?token=AE3VYP7QM6ETGVSIMHYNVQK65IJXO)
