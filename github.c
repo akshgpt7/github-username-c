@@ -15,6 +15,7 @@ struct user_data {
 };
 
 struct node {
+    // node of the linked list to store the users
     struct user_data data;
     struct node *next;
 };
@@ -281,6 +282,7 @@ struct user_data *request(char username[60]) {
     if (ret) {
         return NULL;
     }
+	// making the request to the /users/<username> endpoint
 
 		char url[] = "https://api.github.com/users/";
 		strcat(url, username);
@@ -295,7 +297,7 @@ struct user_data *request(char username[60]) {
 
 int main() {
     char username[60], c;
-		struct user_data *ptr;
+    struct user_data *ptr;
     int choice;
 
 		printf("Enter Username: ");
@@ -303,7 +305,7 @@ int main() {
 		ptr = request(username);
 		insert(*ptr);
 
-    while(1){
+    while(1) {
         printf("Do you want to enter more usernames? (y/n): ");
         scanf("\n%c",&c);
         if(c == 'n' || c == 'N')
